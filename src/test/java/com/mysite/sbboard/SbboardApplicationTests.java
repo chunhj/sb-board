@@ -1,38 +1,25 @@
 package com.mysite.sbboard;
 
-import com.mysite.sbboard.answer.Answer;
-import com.mysite.sbboard.question.Question;
-import com.mysite.sbboard.answer.AnswerRepository;
-import com.mysite.sbboard.question.QuestionRepository;
+import com.mysite.sbboard.question.QuestionService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 @SpringBootTest
 class SbboardApplicationTests {
 
     // 생성자로 객체 주입 방식 권장
-    @Autowired    // Dependency Injection
-    private QuestionRepository questionRepository;
     @Autowired
-    private AnswerRepository answerRepository;
+    private QuestionService questionService; // Dependency Injection
 
-    @Transactional
     @Test
     void testJpa() {
-        Optional<Question> qa = this.questionRepository.findById(2);
-        assertTrue(qa.isPresent());
-        Question q = qa.get();
-        List<Answer> answerList = q.getAnswerList();
-        assertEquals(1, answerList.size());
-        assertEquals("네, 자동으로 생성됩니다.", answerList.get(0).getContent());
+        for (int i = 1; i <= 300; i++) {
+            String subject = String.format("테스트 데이터입니다:[%03d]", i);
+            String content = "내용무";
+            this.questionService.create(subject, content);
+        }
 
 /*
         Optional<Question> oq = this.questionRepository.findById(2);
